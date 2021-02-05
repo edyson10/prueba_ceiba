@@ -3,9 +3,11 @@ package co.com.ceiba.mobile.pruebadeingreso.view;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -16,12 +18,14 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
 
+import co.com.ceiba.mobile.pruebadeingreso.Database.ConexionSQLite;
 import co.com.ceiba.mobile.pruebadeingreso.Database.DTO.User;
 import co.com.ceiba.mobile.pruebadeingreso.R;
 import co.com.ceiba.mobile.pruebadeingreso.Services.Services;
@@ -35,7 +39,11 @@ public class MainActivity extends Activity {
 
     ProgressDialog progressDialog;
     EditText txtBuscar;
+    TextView listEmpty;
 
+    ConexionSQLite conn;
+    SQLiteDatabase db;
+    ContentValues values;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +52,11 @@ public class MainActivity extends Activity {
         progressDialog = new ProgressDialog(MainActivity.this);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerViewSearchResults);
         txtBuscar = (EditText) findViewById(R.id.editTextSearch);
+        listEmpty = (TextView) findViewById(R.id.txtListEmpty);
+
+        listEmpty.setVisibility(View.INVISIBLE);
+
+        conn = new ConexionSQLite(MainActivity.this, "ceiba", null, 1);
 
         listUser = new ArrayList<>();
         llenarRecyclerUser();
@@ -69,16 +82,19 @@ public class MainActivity extends Activity {
     private void filter(String text) {
         ArrayList<User> filterUser = new ArrayList<>();
         for (User user : listUser) {
-            if(user.getNombre().toLowerCase().contains(text.toLowerCase())) {
+            if (user.getNombre().toLowerCase().contains(text.toLowerCase())) {
                 filterUser.add(user);
             }
         }
 
-        Log.e("Data" , "" + filterUser.size());
         if (filterUser.size() == 0) {
-            
+            listEmpty.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.INVISIBLE);
+        } else {
+            listEmpty.setVisibility(View.INVISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
+            adapter_user.filterList(filterUser);
         }
-        adapter_user.filterList(filterUser);
     }
 
     @Override
@@ -108,6 +124,17 @@ public class MainActivity extends Activity {
                                     String correo = jsonArray.getJSONObject(i).getString("email");
                                     String telefono = jsonArray.getJSONObject(i).getString("phone");
                                     listUser.add(new User(id, nombre, correo, telefono));
+
+                                    db = conn.getWritableDatabase();
+                                    values = new ContentValues();
+                                    values.put("id", id);
+                                    values.put("name", nombre);
+                                    values.put("email", correo);
+                                    values.put("phone", telefono);
+                                    values = new ContentValues();
+                                    Long idRes = db.insert("users", String.valueOf(id), values);
+                                    Log.e("RESULTADO", "=> " + idRes);
+                                    db.close();
                                 }
                                 recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
                                 adapter_user = new Adapter_user(listUser, getApplicationContext());

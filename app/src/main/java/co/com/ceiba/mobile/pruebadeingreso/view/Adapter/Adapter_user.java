@@ -49,7 +49,7 @@ public class Adapter_user extends RecyclerView.Adapter<Adapter_user.ViewHolderUs
         return this.listUser.size();
     }
 
-    public void filterList (ArrayList<User> filterUser) {
+    public void filterList(ArrayList<User> filterUser) {
         listUser = filterUser;
         notifyDataSetChanged();
     }

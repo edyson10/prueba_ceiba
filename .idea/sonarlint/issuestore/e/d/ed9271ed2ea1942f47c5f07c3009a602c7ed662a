@@ -1,12 +1,12 @@
 
-m	java:S116"XRename this field "adapter_posts" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(’È“ä
-L
-java:S1874 "6Remove this use of "ProgressDialog"; it is deprecated.(ğİıº
-?
-java:S1659""$Declare "correo" on a separate line.(ô™ìÄùÿÿÿÿ
-Q
-java:S1874)"6Remove this use of "ProgressDialog"; it is deprecated.(Ò¨šüÿÿÿÿ
 A
 java:S1659""&Declare "telefono" on a separate line.(ô™ìÄùÿÿÿÿ
+?
+java:S1659""$Declare "correo" on a separate line.(ô™ìÄùÿÿÿÿ
+L
+java:S1874 "6Remove this use of "ProgressDialog"; it is deprecated.(ğİıº
 =
 java:S1185>"(Remove this method to simply inherit it.(ºŠñ=
+m	java:S116"XRename this field "adapter_posts" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(’È“ä
+Q
+java:S1874)"6Remove this use of "ProgressDialog"; it is deprecated.(Ò¨šüÿÿÿÿ

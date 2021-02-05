@@ -1,8 +1,15 @@
 
+
+java:S11865"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(á¬‡İ8ÏĞÀ÷.
+[
+java:S1155N">Use isEmpty() to check whether the collection is empty or not.(ùÊÅü8›­›‚÷.
 L
-java:S1874 "6Remove this use of "ProgressDialog"; it is deprecated.(ğİıº
-l	java:S116"WRename this field "adapter_user" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(İÆßŞ
-L
-java:S1874'"6Remove this use of "ProgressDialog"; it is deprecated.(›ãÙ¯
+java:S1874$"6Remove this use of "ProgressDialog"; it is deprecated.(ğİıº
+E	java:S108N")Either remove or fill this block of code.(ùÊÅü8›­›‚÷.
 =
-java:S11850"(Remove this method to simply inherit it.(ºŠñ=
+java:S1185U"(Remove this method to simply inherit it.(ºŠñ=
+
+java:S1186:"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(Œğ£Â8éÕæ÷.
+L
+java:S1874,"6Remove this use of "ProgressDialog"; it is deprecated.(›ãÙ¯
+l	java:S116""WRename this field "adapter_user" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(İÆßŞ

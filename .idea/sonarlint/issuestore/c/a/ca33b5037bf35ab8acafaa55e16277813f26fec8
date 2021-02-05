@@ -1,0 +1,17 @@
+
+<
+java:S1659B"&Declare "telefono" on a separate line.(¸©‚¹
+f
+java:S3252$"PUse static access with "android.view.ViewGroup$LayoutParams" for "MATCH_PARENT".(®’¾±
+—
+java:S13194"uThe type of the "filterUser" object should be an interface such as "List" rather than the implementation "ArrayList".(·ÿ¥³üÿÿÿÿ8šž‚÷.
+:
+java:S1659B"$Declare "correo" on a separate line.(¸©‚¹
+f
+java:S3252$"PUse static access with "android.view.ViewGroup$LayoutParams" for "WRAP_CONTENT".(®’¾±
+g	java:S101"MRename this class name to match the regular expression '^[A-Z][a-zA-Z0-9]*$'.(Ö“óýÿÿÿÿ
+‰
+java:S1319"sThe type of the "listUser" object should be an interface such as "List" rather than the implementation "ArrayList".(¹û´
+o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(‹Šäš
+@
+java:S1068"+Remove this unused "context" private field.(êÝç

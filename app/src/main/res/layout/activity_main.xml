@@ -36,6 +36,17 @@
             android:layout_height="match_parent"
             android:layout_below="@id/textInputLayoutSearch"/>
 
+        <TextView
+            style="@style/TextAppearance.AppCompat.Title"
+            android:id="@+id/txtListEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/list_is_empty"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:visibility="gone"/>
+
     </RelativeLayout>
 
 </LinearLayout>
