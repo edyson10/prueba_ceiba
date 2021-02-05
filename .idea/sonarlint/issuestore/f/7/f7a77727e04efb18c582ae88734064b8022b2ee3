@@ -1,0 +1,8 @@
+
+L
+java:S1874 "6Remove this use of "ProgressDialog"; it is deprecated.(ðÝýº
+l	java:S116"WRename this field "adapter_user" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÝÆßÞ
+L
+java:S1874'"6Remove this use of "ProgressDialog"; it is deprecated.(›ãÙ¯
+=
+java:S11850"(Remove this method to simply inherit it.(ºŠñ=
