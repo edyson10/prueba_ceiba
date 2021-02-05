@@ -1,12 +1,32 @@
 package co.com.ceiba.mobile.pruebadeingreso.Database.DTO;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+import android.provider.BaseColumns;
+
+@Entity(tableName = User.TABLE_NAME)
 public class User {
 
+    public static final String TABLE_NAME = "users";
+    public static final String COLUMN_NAME = "name";
+    public static final String COLUMN_ID = BaseColumns._ID;
+
+    @PrimaryKey
+    @ColumnInfo(index = true, name = "id")
     private int id;
+
+    @ColumnInfo(index = true, name = "name")
     private String nombre;
+
+    @ColumnInfo(index = true, name = "email")
     private String email;
+
+    @ColumnInfo(index = true, name = "phone")
     private String telefono;
 
+    @Ignore
     public User() {
 
     }

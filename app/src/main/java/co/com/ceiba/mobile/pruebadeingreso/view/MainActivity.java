@@ -3,11 +3,10 @@ package co.com.ceiba.mobile.pruebadeingreso.view;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.ContentValues;
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -15,7 +14,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -25,7 +23,8 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
-import co.com.ceiba.mobile.pruebadeingreso.Database.ConexionSQLite;
+import co.com.ceiba.mobile.pruebadeingreso.Config.Constantes;
+import co.com.ceiba.mobile.pruebadeingreso.Database.AppDatabase;
 import co.com.ceiba.mobile.pruebadeingreso.Database.DTO.User;
 import co.com.ceiba.mobile.pruebadeingreso.R;
 import co.com.ceiba.mobile.pruebadeingreso.Services.Services;
@@ -41,9 +40,8 @@ public class MainActivity extends Activity {
     EditText txtBuscar;
     TextView listEmpty;
 
-    ConexionSQLite conn;
-    SQLiteDatabase db;
-    ContentValues values;
+    AppDatabase db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,11 +53,18 @@ public class MainActivity extends Activity {
         listEmpty = (TextView) findViewById(R.id.txtListEmpty);
 
         listEmpty.setVisibility(View.INVISIBLE);
-
-        conn = new ConexionSQLite(MainActivity.this, "ceiba", null, 1);
-
         listUser = new ArrayList<>();
-        llenarRecyclerUser();
+
+        db = Room.databaseBuilder(MainActivity.this, AppDatabase.class, Constantes.BD_NAME)
+                .allowMainThreadQueries()
+                .build();
+
+        int tamanio = db.userDao().count();
+        if (tamanio <= 0) {
+            llenarRecyclerUser();
+        } else {
+            llenarDatosRoom();
+        }
 
         txtBuscar.addTextChangedListener(new TextWatcher() {
             @Override
@@ -105,7 +110,6 @@ public class MainActivity extends Activity {
     private void llenarRecyclerUser() {
         ConnectivityManager con = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = con.getActiveNetworkInfo();
-
         if (networkInfo != null && networkInfo.isConnected() && (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE || networkInfo.getType() == ConnectivityManager.TYPE_WIFI)) {
             progressDialog.setMessage("Cargando... Por favor espere!");
             progressDialog.show();
@@ -124,17 +128,12 @@ public class MainActivity extends Activity {
                                     String correo = jsonArray.getJSONObject(i).getString("email");
                                     String telefono = jsonArray.getJSONObject(i).getString("phone");
                                     listUser.add(new User(id, nombre, correo, telefono));
-
-                                    db = conn.getWritableDatabase();
-                                    values = new ContentValues();
-                                    values.put("id", id);
-                                    values.put("name", nombre);
-                                    values.put("email", correo);
-                                    values.put("phone", telefono);
-                                    values = new ContentValues();
-                                    Long idRes = db.insert("users", String.valueOf(id), values);
-                                    Log.e("RESULTADO", "=> " + idRes);
-                                    db.close();
+                                    User users = new User();
+                                    users.setId(id);
+                                    users.setNombre(nombre);
+                                    users.setEmail(correo);
+                                    users.setTelefono(telefono);
+                                    db.userDao().instarAll(users);
                                 }
                                 recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
                                 adapter_user = new Adapter_user(listUser, getApplicationContext());
@@ -172,6 +171,24 @@ public class MainActivity extends Activity {
             AlertDialog dialog = builder.create();
             dialog.show();
         }
+    }
+
+    private void llenarDatosRoom() {
+        progressDialog.setMessage("Cargando... Por favor espere!");
+        progressDialog.show();
+        listUser = (ArrayList<User>) db.userDao().getAllUsuarios();
+        recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        adapter_user = new Adapter_user(listUser, getApplicationContext());
+        adapter_user.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loadView(listUser.get(recyclerView.getChildAdapterPosition(view)).getId(),
+                        listUser.get(recyclerView.getChildAdapterPosition(view)).getNombre(), listUser.get(recyclerView.getChildAdapterPosition(view)).getEmail(),
+                        listUser.get(recyclerView.getChildAdapterPosition(view)).getTelefono());
+            }
+        });
+        recyclerView.setAdapter(adapter_user);
+        progressDialog.hide();
     }
 
     private void loadView(int id, String nombre, String correo, String telefono) {
